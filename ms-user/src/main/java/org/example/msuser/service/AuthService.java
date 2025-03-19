@@ -26,14 +26,12 @@ public class AuthService {
     }
 
     public AuthResponse register(UserRequest request) {
-        // İstifadəçi yaradın
         User user = new User();
         user.setUsername(request.getUsername());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.ADMIN);// Şifrəni hash edin
+        user.setRole(Role.ADMIN);
         userRepository.save(user);
 
-        // Token generasiya edin
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         refreshTokenService.saveRefreshToken(user.getUsername(), refreshToken);
